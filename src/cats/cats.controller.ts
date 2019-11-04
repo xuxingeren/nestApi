@@ -1,8 +1,8 @@
 import { Controller, Get, Query, Response, HttpStatus, HttpCode, Post, Body } from '@nestjs/common';
 
-@Controller('cats')
+@Controller('fetch')
 export class CatsController {
-  @Get('get')
+  @Get('getInfo')
   getId(@Response() res, @Query() query) {
     if (query.id) {
       res.status(HttpStatus.OK).json({
@@ -16,11 +16,11 @@ export class CatsController {
     });
     }
   }
-  @Post('set')
+  @Post('login')
   setData(@Response() res, @Body() body) {
     res.status(HttpStatus.OK).json({
-      name: body.name,
-      age: body.age,
+      user: body.user || 'test',
+      password: body.password || 'password',
       code: 200,
   });
   }
