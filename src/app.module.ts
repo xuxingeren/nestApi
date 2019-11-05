@@ -13,6 +13,6 @@ export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(Cors)
-      .forRoutes('fetch');
+      .forRoutes({ path: 'fetch', method: RequestMethod.ALL });
   }
 }
