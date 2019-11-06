@@ -10,6 +10,7 @@ import { CatsController } from './cats/cats.controller';
   providers: [AppService],
 })
 export class AppModule {}
+// 跨域中间件
 // export class AppModule implements NestModule {
 //   configure(consumer: MiddlewareConsumer) {
 //     consumer
