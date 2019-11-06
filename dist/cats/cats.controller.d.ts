@@ -1,3 +1,4 @@
 export declare class CatsController {
-    finally(): string;
+    getId(res: any, query: any): void;
+    setData(res: any, body: any): void;
 }
