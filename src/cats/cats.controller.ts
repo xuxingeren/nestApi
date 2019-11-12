@@ -18,6 +18,7 @@ export class CatsController {
   }
   @Post('login')
   setData(@Response() res, @Body() body) {
+    console.log(body);
     res.status(HttpStatus.OK).json({
       user: body.user || 'test',
       password: body.password || 'password',
