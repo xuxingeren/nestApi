@@ -2,7 +2,7 @@ import { Controller, Get, Query, Response, HttpStatus, HttpCode, Post, Body } fr
 
 @Controller('fetch')
 export class CatsController {
-  @Get('getInfo')
+  @Get('getUserInfo')
   getId(@Response() res, @Query() query) {
     if (query.id) {
       res.status(HttpStatus.OK).json({
@@ -10,7 +10,7 @@ export class CatsController {
         code: 200,
     });
     } else {
-      res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+      res.status(HttpStatus.BAD_REQUEST).json({
         msg: 'id没有传过来',
         code: 500,
     });

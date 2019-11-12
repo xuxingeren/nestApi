@@ -1,11 +1,13 @@
 import { Module, NestModule, MiddlewareConsumer, RequestMethod } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { PhotoModule } from './photo/photo.module';
 import { CatsController } from './cats/cats.controller';
+
 // import { Cors } from './cors.middleware';
 
 @Module({
-  imports: [],
+  imports: [PhotoModule],
   controllers: [AppController, CatsController],
   providers: [AppService],
 })
