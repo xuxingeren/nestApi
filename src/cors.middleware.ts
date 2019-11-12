@@ -16,8 +16,7 @@ export class Cors implements NestMiddleware {
       if (req.method === 'OPTIONS') {
         res.set({
           'Access-Control-Allow-Headers':
-          `resources-type,xuxin-auth,
-          DNT,X-Mx-ReqToken,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Authorization`,
+          'resources-type,xuxin-auth,DNT,X-Mx-ReqToken,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Authorization',
           'Content-Type': 'text/plain;charset=UTF-8',
           'Access-Control-Max-Age': 1728000,
           'Content-Length': 0,
