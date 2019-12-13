@@ -1,6 +1,7 @@
-import { Controller, Get, Post, Body } from '@nestjs/common';
-import { User, Login } from './interfaces/auth.interface';
+import { Controller, Get, Post, Body, Res } from '@nestjs/common';
+import { User, Login, Register } from './interfaces/auth.interface';
 import { AuthService } from './services/auth.service';
+import { Response } from 'express';
 
 @Controller('auth')
 export class AuthController {
@@ -10,11 +11,15 @@ export class AuthController {
     return await this.authService.findUser();
   }
   @Post('login')
-  async login(@Body() login: Login): Promise<{}> {
-    return await this.authService.login(login);
+  async login(@Body() login: Login, @Res() res: Response): Promise<{}> {
+    return await this.authService.login(res, login);
   }
   @Get('getRouteList')
   async getRouteList(): Promise<{}> {
     return await this.authService.getRouteList();
+  }
+  @Post('register')
+  async register(@Body() register: Register): Promise<{}> {
+    return await this.authService.register(register);
   }
 }

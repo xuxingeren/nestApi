@@ -1,8 +1,16 @@
-import { Injectable } from '@nestjs/common';
-import { User, Login } from '../interfaces/auth.interface';
+import { Injectable, Scope, Inject } from '@nestjs/common';
+import { User, Login, Register } from '../interfaces/auth.interface';
+import { rsaDecrypt } from '../../utils/encryption';
+import { JwtService } from '@nestjs/jwt';
+import { REQUEST } from '@nestjs/core';
+import { Request, Response } from 'express';
 
-@Injectable()
+@Injectable({ scope: Scope.REQUEST })
 export class AuthService {
+  constructor(
+    @Inject(REQUEST) private readonly req: Request,
+    private readonly jwtService: JwtService,
+  ) { }
   async findUser(): Promise<User> {
     return {
       id: 1111,
@@ -10,12 +18,17 @@ export class AuthService {
       age: 18,
     };
   }
-  async login(login: Login): Promise<{}> {
-    console.log(login);
+  async login(res: Response, login: Login): Promise<{}> {
+    const payload = {
+      user: login.user,
+      type: this.req.headers['resources-type'],
+    };
+    const token = this.jwtService.sign(payload);
+    res.cookie('x-access-token', token, { expires: new Date(Date.now() + 900000), httpOnly: true });
+    console.log(login.user, token);
     return {
       success: true,
       code: 200,
-      message: 'asdfasdf',
     };
   }
   async getRouteList(): Promise<{}> {
@@ -48,6 +61,13 @@ export class AuthService {
         levelId: '2-3',
         icon: 'heart',
       }],
+    };
+  }
+  async register(register: Register): Promise<{}> {
+    console.log(rsaDecrypt(new Buffer(register.user, 'base64')).toString());
+    return {
+      success: true,
+      code: 200,
     };
   }
 }

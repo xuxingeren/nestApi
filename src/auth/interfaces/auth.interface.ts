@@ -8,3 +8,8 @@ export interface Login {
   readonly user: string;
   readonly password: string;
 }
+
+export interface Register {
+  readonly user: string;
+  readonly password: string;
+}
