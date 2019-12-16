@@ -13,9 +13,11 @@ client.on('error', (error) => {
 
 const getAsync = util.promisify(client.get).bind(client);
 const setAsync = util.promisify(client.set).bind(client);
+const delAsync = util.promisify(client.del).bind(client);
 
 export {
   client,
   getAsync,
   setAsync,
+  delAsync,
 };

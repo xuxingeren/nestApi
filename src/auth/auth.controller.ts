@@ -22,4 +22,8 @@ export class AuthController {
   async register(@Body() register: Register): Promise<{}> {
     return await this.authService.register(register);
   }
+  @Get('logout')
+  async logout(@Res() res: Response): Promise<void> {
+    return await this.authService.logout(res);
+  }
 }

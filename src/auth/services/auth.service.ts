@@ -4,7 +4,7 @@ import { rsaDecrypt } from '../../utils/encryption';
 import { JwtService } from '@nestjs/jwt';
 import { REQUEST } from '@nestjs/core';
 import { Request, Response } from 'express';
-import { setAsync } from '../../utils/redis';
+import { setAsync, delAsync } from '../../utils/redis';
 
 @Injectable({ scope: Scope.REQUEST })
 export class AuthService {
@@ -71,5 +71,15 @@ export class AuthService {
       success: true,
       code: 200,
     };
+  }
+  async logout(res: Response): Promise<void> {
+    const token = this.req.cookies['x-access-token'];
+    console.log(token);
+    await delAsync(token);
+    res.clearCookie('x-access-token');
+    res.status(200).json({
+      success: true,
+      code: 200,
+    });
   }
 }
