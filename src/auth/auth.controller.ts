@@ -11,7 +11,7 @@ export class AuthController {
     return await this.authService.findUser();
   }
   @Post('login')
-  async login(@Body() login: Login, @Res() res: Response): Promise<{}> {
+  async login(@Body() login: Login, @Res() res: Response): Promise<void> {
     return await this.authService.login(res, login);
   }
   @Get('getRouteList')

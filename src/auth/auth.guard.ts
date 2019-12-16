@@ -1,18 +1,28 @@
 import { Injectable, CanActivate, ExecutionContext, HttpStatus } from '@nestjs/common';
 import { ApiException } from '../common/exceptions/api.exception';
-import { Observable } from 'rxjs';
 import cfg from '../config';
+import { getAsync } from '../utils/redis';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-  canActivate(
+  async canActivate(
     context: ExecutionContext,
-  ): boolean | Promise<boolean> | Observable<boolean> {
+  ): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
     const token = request.cookies['x-access-token'];
-    if (!token && !cfg.nextUrl.includes(request.originalUrl)) {
-      throw new ApiException('登录失效', HttpStatus.UNAUTHORIZED);
+    if (!cfg.nextUrl.includes(request.originalUrl)) {
+      if (!token) {
+        throw new ApiException('登录失效', HttpStatus.UNAUTHORIZED);
+      } else {
+        const haveToken = await getAsync(token);
+        if (haveToken) {
+          return true;
+        } else {
+          throw new ApiException('登录失效', HttpStatus.UNAUTHORIZED);
+        }
+      }
+    } else {
+      return true;
     }
-    return true;
   }
 }
