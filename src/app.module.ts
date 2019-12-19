@@ -1,15 +1,15 @@
 import { Module, NestModule, MiddlewareConsumer, RequestMethod } from '@nestjs/common';
-import { APP_FILTER, APP_GUARD } from '@nestjs/core';
+import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-// import { PhotoModule } from './photo/photo.module';
-import { Cors } from './middleware/index';
 import { AuthModule } from './auth/auth.module';
 import { ApiException } from './common/exceptions/api.exception';
 import { AuthGuard } from './auth/auth.guard';
+import { LoggingInterceptor, TransformInterceptor, ErrorsInterceptor } from './interceptor';
 
 @Module({
-  imports: [AuthModule],
+  imports: [AuthModule, TypeOrmModule.forRoot()],
   controllers: [AppController],
   providers: [AppService, {
     provide: APP_FILTER,
@@ -17,14 +17,25 @@ import { AuthGuard } from './auth/auth.guard';
   }, {
       provide: APP_GUARD,
       useClass: AuthGuard,
-    }],
+    }, {
+      provide: APP_INTERCEPTOR,
+      useClass: LoggingInterceptor,
+    }, {
+      provide: APP_INTERCEPTOR,
+      useClass: TransformInterceptor,
+    }, {
+      provide: APP_INTERCEPTOR,
+      useClass: ErrorsInterceptor,
+    },
+  ],
 })
-// export class AppModule {}
+
+export class AppModule { }
 // 跨域中间件
-export class AppModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(Cors)
-      .forRoutes({ path: '*', method: RequestMethod.ALL });
-  }
-}
+// export class AppModule implements NestModule {
+//   configure(consumer: MiddlewareConsumer) {
+//     consumer
+//       .apply(Csrf)
+//       .forRoutes({ path: '*', method: RequestMethod.ALL });
+//   }
+// }
