@@ -2,11 +2,11 @@ import {
   Injectable,
   NestInterceptor,
   ExecutionContext,
-  BadGatewayException,
   CallHandler,
 } from '@nestjs/common';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { ApiException } from '../common/exceptions/api.exception';
 
 @Injectable()
 export default class ErrorsInterceptor implements NestInterceptor {
@@ -14,7 +14,13 @@ export default class ErrorsInterceptor implements NestInterceptor {
     return next
       .handle()
       .pipe(
-        catchError(err => throwError(new BadGatewayException())),
+        catchError(err => {
+          console.log('********************************');
+          console.log('error:', err);
+          console.log(`After-------------------------------------------------------`);
+          return throwError(new ApiException(err.message, err.status));
+        },
+        ),
       );
   }
 }

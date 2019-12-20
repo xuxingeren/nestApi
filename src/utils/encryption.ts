@@ -1,5 +1,10 @@
 import * as crypto from 'crypto';
 
+function randomBytes() {
+  const buf = crypto.randomBytes(128);
+  return buf.toString('hex');
+}
+
 function encryptByDES(message: string, key = 'M^LMhpW7wgU*t%opFGAGE7U$'): string {
   const cipher = crypto.createCipheriv('des-ede3', crypto.scryptSync(key, '', 24), '');
   cipher.setAutoPadding(true);
@@ -53,6 +58,7 @@ gYMNPGcLhkfk
 }
 
 export {
+  randomBytes,
   rsaDecrypt,
   rsaEncrypt,
   encryptByDES,

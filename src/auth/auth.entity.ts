@@ -1,21 +1,21 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
 @Entity()
 export class Auth {
   @PrimaryGeneratedColumn()
   uid: number;
 
-  @Column('char')
+  @Column({ readonly: true, type: 'char', unique: true, length: 11 })
   user: string;
 
-  @Column('varchar')
+  @Column({ type: 'varchar', length: 255 })
   password: string;
 
   @Column('timestamp')
-  'create_time': string;
+  'create_time': Date;
 
-  @Column('timestamp')
-  'update_time': string;
+  @UpdateDateColumn({ type: 'timestamp' })
+  'update_time': Date;
 }
 
 // Entity装饰器，表示这个类是一个实例类，和数据库的表字段一致，便于修改删除等操作

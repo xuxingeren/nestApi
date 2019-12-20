@@ -15,6 +15,7 @@ export default class LoggingInterceptor implements NestInterceptor {
       body: request.body,
       params: request.params,
     };
+    console.log('********************************');
     console.log('Request:', Request);
     const now = Date.now();
     return next

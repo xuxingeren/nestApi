@@ -5,8 +5,8 @@ module.exports = {
   "username": "root",
   "password": "123456",
   "database": "test",
-  "entities": ["dist/**/*.entity{.ts,.js}"],
-  "synchronize": false,
+  "entities": ["src/**/*.entity{.ts,.js}"],
+  "synchronize": true,
   "migrations": ["database/migration/**/*.ts"],
   "cli": {
     "migrationsDir": "database/migration/default"

@@ -1,5 +1,4 @@
-import { PipeTransform, Injectable, ArgumentMetadata, HttpStatus } from '@nestjs/common';
-import { ApiException } from '../common/exceptions/api.exception';
+import { PipeTransform, Injectable, ArgumentMetadata, HttpStatus, HttpException } from '@nestjs/common';
 
 @Injectable()
 export class ValidatePipe implements PipeTransform {
@@ -7,7 +6,7 @@ export class ValidatePipe implements PipeTransform {
   transform(value: any, metadata: ArgumentMetadata) {
     const { error } = this.schema.validate(value);
     if (error) {
-      throw new ApiException(error.details[0].message, HttpStatus.BAD_REQUEST);
+      throw new HttpException(error.details[0].message, HttpStatus.BAD_REQUEST);
     }
     return value;
   }

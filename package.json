@@ -11,7 +11,7 @@
         "start:dev": "tsc-watch -p tsconfig.build.json --onSuccess \"node dist/main.js\"",
         "start:debug": "tsc-watch -p tsconfig.build.json --onSuccess \"node --inspect-brk dist/main.js\"",
         "start:prod": "node dist/main.js",
-        "hot": "node dist/server",
+        "hot": "ts-node dist/server",
         "webpack": "webpack --config webpack.config.js",
         "lint": "tslint -p tsconfig.json -c tslint.json",
         "test": "jest",
