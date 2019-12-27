@@ -4,7 +4,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { AuthController } from './auth.controller';
 import { AuthService } from './services/auth.service';
 import { PassportModule } from '@nestjs/passport';
-import { jwtConstants } from './constants';
+import { jwtConstants } from '../config/constants';
 import { Auth } from './auth.entity';
 
 @Module({
@@ -18,6 +18,6 @@ import { Auth } from './auth.entity';
     TypeOrmModule.forFeature([Auth])],
   controllers: [AuthController],
   providers: [AuthService],
-  exports: [TypeOrmModule],
+  exports: [TypeOrmModule, JwtModule],
 })
 export class AuthModule { }

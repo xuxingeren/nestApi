@@ -1,9 +1,10 @@
 import { Injectable, Scope, Inject, HttpStatus, HttpException } from '@nestjs/common';
-import { User, Login, Register } from '../interfaces/auth.interface';
+import { User, Login, Register, Payload } from '../interfaces/auth.interface';
 import { rsaEncrypt, rsaDecrypt } from '../../utils/encryption';
 import { JwtService } from '@nestjs/jwt';
 import { REQUEST } from '@nestjs/core';
-import { Request, Response } from 'express';
+import { Response } from 'express';
+import { AddUserRequest } from '../../interfaces';
 import { setAsync, delAsync, expireAsync } from '../../utils/redis';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -12,38 +13,38 @@ import { Auth } from '../auth.entity';
 @Injectable({ scope: Scope.REQUEST })
 export class AuthService {
   constructor(
-    @Inject(REQUEST) private readonly req: Request,
+    @Inject(REQUEST) private readonly req: AddUserRequest,
     private readonly jwtService: JwtService,
     @InjectRepository(Auth)
     private readonly authRepository: Repository<Auth>,
   ) { }
   async findUser(): Promise<User> {
     try {
-      const res = await this.authRepository.findOne({ user: '17783267847' });
-      console.log(res);
+      const { uid } = this.req.user;
+      const res = await this.authRepository.findOne({ uid });
+      return {
+        uid: res.uid,
+        user: res.user,
+      };
     } catch (error) {
-      console.log(error);
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
-    return {
-      id: 1111,
-      name: '小明',
-      age: 18,
-    };
   }
   async login(res: Response, login: Login): Promise<void> {
     try {
       const authData = await this.authRepository.findOne({ user: login.user });
-      const password = rsaDecrypt(new Buffer(authData.password, 'base64')).toString();
+      if (!authData) {
+        throw new Error('账号或密码错误');
+      }
+      const password = rsaDecrypt(Buffer.from(authData.password, 'base64')).toString();
       if (password === login.password) {
-        const payload = {
+        const payload: Payload = {
           uid: authData.uid,
           user: authData.user,
           type: this.req.headers['resources-type'],
         };
-        const token = this.jwtService.sign(payload);
+        const token = await this.signToken(payload);
         res.cookie('x-access-token', token, { expires: new Date(Date.now() + 120 * 60 * 1000), httpOnly: true });
-        await setAsync(token, true);
-        await expireAsync(token, 120 * 60);
         res.status(200).json({
           success: true,
           code: 200,
@@ -110,5 +111,11 @@ export class AuthService {
       success: true,
       code: 200,
     });
+  }
+  async signToken(payload: Payload): Promise<string> {
+    const token = this.jwtService.sign(payload);
+    await setAsync(token, true);
+    await expireAsync(token, 120 * 60);
+    return token;
   }
 }

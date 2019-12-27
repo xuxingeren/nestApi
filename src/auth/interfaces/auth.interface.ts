@@ -1,7 +1,6 @@
 export interface User {
-  readonly id: number;
-  readonly name: string;
-  readonly age: number;
+  readonly uid: number;
+  readonly user: string;
 }
 
 export interface Login {
@@ -12,4 +11,10 @@ export interface Login {
 export interface Register {
   readonly user: string;
   readonly password: string;
+}
+
+export interface Payload {
+  readonly uid: number;
+  readonly user: string;
+  readonly type: string | string[];
 }
