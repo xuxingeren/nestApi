@@ -1,10 +1,11 @@
 import { Module, NestModule, MiddlewareConsumer, RequestMethod } from '@nestjs/common';
-import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
+import { APP_FILTER, APP_INTERCEPTOR, APP_GUARD } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthMiddleware } from './middleware';
 import { AuthModule } from './auth/auth.module';
+import { AuthGuard } from './auth/auth.guard';
 import { ApiException } from './common/exceptions/api.exception';
 import { LoggingInterceptor, TransformInterceptor, ErrorsInterceptor } from './interceptor';
 
@@ -23,6 +24,9 @@ import { LoggingInterceptor, TransformInterceptor, ErrorsInterceptor } from './i
     }, {
       provide: APP_INTERCEPTOR,
       useClass: ErrorsInterceptor,
+    }, {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
     },
   ],
 })

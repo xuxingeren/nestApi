@@ -8,7 +8,7 @@ export class AuthGuard implements CanActivate {
     context: ExecutionContext,
   ): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
-    if (request.user || !cfg.nextUrl.includes(request.originalUrl)) {
+    if (request.user || cfg.nextUrl.includes(request.originalUrl)) {
       return true;
     } else {
       throw new ApiException('登录失效', HttpStatus.UNAUTHORIZED);
