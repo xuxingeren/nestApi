@@ -44,7 +44,7 @@ export class AuthService {
           type: this.req.headers['resources-type'],
           loginDate: Date.now(),
         };
-        const token = await this.signToken(authData.uid, payload);
+        const token = await this.signToken(payload);
         res.cookie('x-access-token', token, { expires: new Date(Date.now() + 120 * 60 * 1000), httpOnly: true });
         res.status(200).json({
           success: true,
@@ -119,18 +119,18 @@ export class AuthService {
     }
   }
   async logout(res: Response): Promise<void> {
-    const { uid } = this.req.user as Payload;
-    await delAsync(uid);
+    const { uid, type } = this.req.user as Payload;
+    await delAsync(`${uid}&${type}`);
     res.clearCookie('x-access-token');
     res.status(200).json({
       success: true,
       code: 200,
     });
   }
-  async signToken(uid: number, payload: Payload): Promise<string> {
+  async signToken(payload: Payload): Promise<string> {
     const token = this.jwtService.sign(payload);
-    await setAsync(uid, token);
-    await expireAsync(uid, 120 * 60);
+    await setAsync(`${payload.user}&${payload.type}`, token);
+    await expireAsync(`${payload.user}&${payload.type}`, 120 * 60);
     return token;
   }
 }

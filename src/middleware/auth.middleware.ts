@@ -15,9 +15,9 @@ export default class AuthMiddleware implements NestMiddleware {
     }
     const user = this.jwtService.decode(token) as Payload;
     if (user) {
-      const redisToken = await getAsync(user.uid);
+      const redisToken = await getAsync(`${user.user}&${user.type}`);
       const redisUser = this.jwtService.decode(redisToken) as Payload;
-      if (redisToken === token || user.type !== redisUser.type) {
+      if ((redisToken === token || user.type !== redisUser.type) && req.headers['resources-type'] === user.type) {
         req.user = user;
       }
     }
