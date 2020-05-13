@@ -1,3 +1,3 @@
 export default {
-  nextUrl: ['/auth/login', '/auth/register', '/auth/logout'],
+  nextUrl: ['/auth/login', '/auth/register'],
 };

@@ -13,10 +13,13 @@ export default class AuthMiddleware implements NestMiddleware {
       next();
       return;
     }
-    const haveToken = await getAsync(token);
-    if (haveToken) {
-      const user = this.jwtService.decode(token);
-      req.user = user as Payload;
+    const user = this.jwtService.decode(token) as Payload;
+    if (user) {
+      const redisToken = await getAsync(user.uid);
+      const redisUser = this.jwtService.decode(redisToken) as Payload;
+      if (redisToken === token || user.type !== redisUser.type) {
+        req.user = user;
+      }
     }
     next();
   }

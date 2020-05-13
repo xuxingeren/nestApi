@@ -17,4 +17,5 @@ export interface Payload {
   readonly uid: number;
   readonly user: string;
   readonly type: string | string[];
+  loginDate?: number;
 }
