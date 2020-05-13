@@ -20,7 +20,7 @@ export class AuthService {
   ) { }
   async findUser(): Promise<User> {
     try {
-      const { uid } = this.req.user;
+      const { uid } = this.req.user as Payload;
       const res = await this.authRepository.findOne({ uid });
       return {
         uid: res.uid,

@@ -3,7 +3,7 @@ import { Response } from 'express';
 import { AddUserRequest } from '../interfaces';
 import { JwtService } from '@nestjs/jwt';
 import { getAsync } from '../utils/redis';
-
+import { Payload } from '../auth/interfaces/auth.interface';
 @Injectable()
 export default class AuthMiddleware implements NestMiddleware {
   constructor(private readonly jwtService: JwtService) { }
@@ -16,7 +16,7 @@ export default class AuthMiddleware implements NestMiddleware {
     const haveToken = await getAsync(token);
     if (haveToken) {
       const user = this.jwtService.decode(token);
-      req.user = user;
+      req.user = user as Payload;
     }
     next();
   }
