@@ -1,5 +1,6 @@
 import { Module, NestModule, MiddlewareConsumer, RequestMethod } from '@nestjs/common';
 import { APP_FILTER, APP_INTERCEPTOR, APP_GUARD } from '@nestjs/core';
+import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -10,7 +11,9 @@ import { ApiException } from './common/exceptions/api.exception';
 import { LoggingInterceptor, TransformInterceptor, ErrorsInterceptor } from './interceptor';
 
 @Module({
-  imports: [AuthModule, TypeOrmModule.forRoot()],
+  imports: [ConfigModule.forRoot({
+    envFilePath: `.env.${process.env.NODE_ENV}`,
+  }), AuthModule, TypeOrmModule.forRoot()],
   controllers: [AppController],
   providers: [AppService, {
     provide: APP_FILTER,

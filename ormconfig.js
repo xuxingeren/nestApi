@@ -1,13 +1,13 @@
 module.exports = {
-  "type": "mysql",
-  "host": "localhost",
-  "port": 3306,
-  "username": "root",
-  "password": "123456",
-  "database": "test",
-  "entities": ["src/**/*.entity{.ts,.js}"],
-  "synchronize": true,
-  "migrations": ["database/migration/**/*.ts"],
+  "type": process.env.TYPE,
+  "host": process.env.HOST,
+  "port": process.env.PORT,
+  "username": process.env.USERNAME,
+  "password": process.env.PASSWORD,
+  "database": process.env.DATABASE,
+  "entities": [process.env.ENTITIES],
+  "synchronize": process.env.SYNCHRONIZE,
+  "migrations": ["database/migration/**/*{.ts,.js}"],
   "cli": {
     "migrationsDir": "database/migration/default"
   }

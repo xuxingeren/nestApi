@@ -1,5 +1,6 @@
 import { Injectable, CanActivate, ExecutionContext, HttpStatus } from '@nestjs/common';
 import { ApiException } from '../common/exceptions/api.exception';
+import { Request, Response } from 'express';
 import cfg from '../config';
 
 @Injectable()
@@ -7,8 +8,8 @@ export class AuthGuard implements CanActivate {
   async canActivate(
     context: ExecutionContext,
   ): Promise<boolean> {
-    const request = context.switchToHttp().getRequest();
-    const response = context.switchToHttp().getResponse();
+    const request: Request = context.switchToHttp().getRequest();
+    const response: Response = context.switchToHttp().getResponse();
     if (request.user || cfg.nextUrl.includes(request.originalUrl)) {
       return true;
     } else {

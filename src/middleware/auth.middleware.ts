@@ -8,16 +8,17 @@ import { Payload } from '../auth/interfaces/auth.interface';
 export default class AuthMiddleware implements NestMiddleware {
   constructor(private readonly jwtService: JwtService) { }
   async use(req: AddUserRequest, res: Response, next: () => void) {
-    const token = req.cookies['x-access-token'];
+    const token: string = req.cookies['x-access-token'];
+    const type = req.headers['resources-type'] as string;
     if (!token) {
       next();
       return;
     }
     const user = this.jwtService.decode(token) as Payload;
     if (user) {
-      const redisToken = await getAsync(`${user.user}&${user.type}`);
+      const redisToken: string = await getAsync(`${user.user}&${user.type}`);
       const redisUser = this.jwtService.decode(redisToken) as Payload;
-      if ((redisToken === token || user.type !== redisUser.type) && req.headers['resources-type'] === user.type) {
+      if ((redisToken === token || user.type !== redisUser.type) && type === user.type) {
         req.user = user;
       }
     }

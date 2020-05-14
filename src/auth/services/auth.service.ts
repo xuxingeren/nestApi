@@ -41,7 +41,7 @@ export class AuthService {
         const payload: Payload = {
           uid: authData.uid,
           user: authData.user,
-          type: this.req.headers['resources-type'],
+          type: this.req.headers['resources-type'] as string,
           loginDate: Date.now(),
         };
         const token = await this.signToken(payload);

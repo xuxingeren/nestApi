@@ -16,6 +16,6 @@ export interface Register {
 export interface Payload {
   readonly uid: number;
   readonly user: string;
-  readonly type: string | string[];
+  readonly type: string;
   loginDate?: number;
 }
