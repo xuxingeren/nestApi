@@ -12,7 +12,7 @@
         "start:dev": "cross-env NODE_ENV=development node dist/main.js",
         "start:test": "cross-env NODE_ENV=test node dist/main.js",
         "start:prod": "cross-env NODE_ENV=production node dist/main.js",
-        "pm2": "pm2 start --name nest cross-env NODE_ENV=production dist/main.js",
+        "pm2": "cross-env NODE_ENV=production pm2 start --name nest dist/main.js",
         "hot": "cross-env NODE_ENV=development ts-node dist/server",
         "webpack": "webpack --config webpack.config.js",
         "lint": "tslint -p tsconfig.json -c tslint.json",
