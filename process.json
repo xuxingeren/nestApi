@@ -1,0 +1,16 @@
+{
+  "apps": [{
+    "name": "nest",
+    "script": "./dist/main.js",
+    "exec_interpreter": "/usr/local/bin/node",
+    "exec_mode": "fork",
+    "max_memory_restart": "1024M",
+    "watch": true,
+    "log_date_format": "YYYY-MM-DD HH:mm:ss Z",
+    "out_file": "./nest.log",
+    "error_file": "./nest.error.log",
+    "env": {
+      "NODE_ENV": "production"
+    }
+  }]
+}
